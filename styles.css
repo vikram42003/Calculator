@@ -1,0 +1,98 @@
+*,
+::before,
+::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --body-bg-color: honeydew;
+  --calculator-bg-color: #268057;
+  --buttons-bg-color: #00cc70;
+  --history-bg-color: #268057;
+  --history-box-bg-color: #c3ffc1;
+}
+
+/* :root {
+  --body-bg-color: honeydew;
+  --calculator-bg-color: #268057;
+  --buttons-bg-color: #00cc70;
+  --history-bg-color: #268057;
+  --history-box-bg-color: #c3ffc1;
+} */
+
+body {
+  height: 100vh;
+  width: 100vw;
+  padding: 10vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+  background-color: var(--body-bg-color);
+}
+
+body * {
+  flex: 0 1 auto;
+  border-radius: 10px;
+  font-size: 1.1rem;
+}
+
+/* Calculator Container */
+.calculator-container {
+  background-color: var(--calculator-bg-color);
+  width: 500px;
+  height: 70vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.display {
+  background-color: white;
+  margin: 20px 16px;
+  height: 100px;
+}
+
+.buttons-container {
+  height: 100%;
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(4, auto);
+  padding: 12px;
+  gap: 4px;
+}
+
+.buttons {
+  background-color: var(--buttons-bg-color);
+  border: none;
+  margin: 3px;
+}
+
+/* History Container */
+.history-container {
+  background-color: var(--history-bg-color);
+  width: 250px;
+  height: 70vh;
+  padding: 0.5% 1%;
+  font-size: 1.3rem;
+  vertical-align: bottom;
+  overflow: auto;
+}
+
+p {
+  font-size: inherit;
+  background-color: var(--history-box-bg-color);
+  border-radius: 5px;
+  text-align: end;
+  margin-top: 3%;
+  min-height: 2em;
+  line-height: 2em;
+  padding-right: 5%;
+}
+
+p:first-child {
+  text-align: center;
+  position: sticky;
+  padding: 0;
+}
