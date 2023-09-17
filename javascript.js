@@ -17,7 +17,7 @@
 
 
 
-console.log(calculate("( 10 - 2 ) * ( 3 + 1 )"));
+console.log(calculate("( ( 10 / 2 ) + 1 ) * ( 3 - 1 )"));
 
 
 
@@ -27,10 +27,8 @@ function calculate(equation) {
   if (!Array.isArray(equation)) {
     equation = equation.trim().split(" ");
   }
-  console.log(equation);
 
   equation = parenthesis(equation);
-  console.log(equation);
   equation = exponent_order(equation);
   equation = multiplication_division(equation);
   equation = addition_subtraction(equation);
@@ -39,27 +37,37 @@ function calculate(equation) {
 }
 
 function parenthesis(equation) {
-  let parenthesisStartIndex = -1, parenthesisEndIndex = -1;
-  for(let i = 0; i < equation.length; i++) {
-    if (equation[i] === "(") {
-      parenthesisStartIndex = i;
-    }
-    else if (equation[i] === ")") {
-      parenthesisEndIndex = i;
-      if (parenthesisStartIndex !== -1 && parenthesisEndIndex !== -1) {
-        const subEquation = equation.slice(parenthesisStartIndex + 1, parenthesisEndIndex);
-        console.log(subEquation);
-        const ans = calculate(subEquation);
-        equation.splice(parenthesisStartIndex, parenthesisEndIndex + 1, ans);
-      }
+  let parenthesisPairs = 0;
+
+  for (let i = 0; i < equation.length; i++) {
+    if (equation[i] === "(" || equation[i] === ")") {
+      parenthesisPairs++;
     }
   }
 
-  if (parenthesisStartIndex !== -1 && parenthesisEndIndex !== -1) {
-    const subEquation = equation.slice(parenthesisStartIndex + 1, parenthesisEndIndex);
-    console.log(subEquation);
-    const ans = calculate(subEquation);
-    equation.splice(parenthesisStartIndex, parenthesisEndIndex + 1, ans);
+  parenthesisPairs /= 2;
+
+  for (let j = 0; j < parenthesisPairs; j++) {
+    let parenthesisStartIndex = -1, parenthesisEndIndex = -1;
+
+    for(let i = 0, length = equation.length; i < length; i++) {
+      if (equation[i] === "(") {
+        parenthesisStartIndex = i;
+      }
+      else if (equation[i] === ")") {
+        parenthesisEndIndex = i;
+        if (parenthesisStartIndex !== -1 && parenthesisEndIndex !== -1) {
+          console.log(equation);
+          const subEquation = equation.slice(parenthesisStartIndex + 1, parenthesisEndIndex);
+          const ans = calculate(subEquation);
+
+          let toRemove = (parenthesisEndIndex + 1) - parenthesisStartIndex;
+          equation.splice(parenthesisStartIndex, toRemove, ans);
+          console.log(equation);
+        }
+        break;
+      }
+    }
   }
 
   return equation;
