@@ -17,21 +17,49 @@
 
 
 
-console.log(calculate("2 + 4 !"));
+console.log(calculate("π"));
 
 
 
 
 
 function calculate(equation) {
+  if(!equation) {
+    return;
+  }
+
   if (!Array.isArray(equation)) {
     equation = equation.trim().split(" ");
   }
 
-  equation = parenthesis(equation);
-  equation = exponent_order_factorial(equation);
-  equation = multiplication_division(equation);
-  equation = addition_subtraction(equation);
+  const flags = {
+    par: 0,
+    exp_fact: 0,
+    mul_div_mod: 0,
+    add_sub: 0
+  }
+
+  equation.forEach((element) => {
+    if (element === "(" || element === ")") {
+      flags.par++;
+    }
+    else if (element === "^" || element === "!") {
+      flags.exp_fact++;
+    }
+    else if (element === "*" || element === "/" || element === "%") {
+      flags.mul_div_mod++;
+    }
+    else if (element === "+" || element === "-") {
+      flags.add_sub++;
+    }
+  })
+
+  // If the flag is true which means that the corresponding operation needs to be performed
+  // Then run the function and update equation, else do nothing (undefined is equal to doing nothing)
+  flags.par ? equation = parenthesis(equation) : undefined;
+  flags.exp_fact ? equation = exponent_factorial(equation) : undefined;
+  flags.mul_div_mod ? equation = multiplication_division_modulus(equation) : undefined;
+  flags.add_sub ? equation = addition_subtraction(equation) : undefined;
   
   return +equation;
 }
@@ -73,7 +101,8 @@ function parenthesis(equation) {
   return equation;
 }
 
-function exponent_order_factorial(equation) {
+function exponent_factorial(equation) {
+  // Exponent
   for (let i = 0, length = equation.length; i < length; i++) {
     if (equation[i] === "^") {
       let ans = (+equation[i - 1]) ** +equation[i + 1];
@@ -83,6 +112,7 @@ function exponent_order_factorial(equation) {
     }
   }
 
+  // Factorial
   for (let i = 0, length = equation.length; i < length; i++) {
     if (equation[i] === "!") {
       let ans = 1, num = equation[i - 1];
@@ -99,7 +129,7 @@ function exponent_order_factorial(equation) {
   return equation;
 }
 
-function multiplication_division(equation) {
+function multiplication_division_modulus(equation) {
   for (let i = 0, length = equation.length; i < length; i++) {
     if (equation[i] === "*") {
       let ans = +equation[i - 1] * +equation[i + 1];
@@ -109,6 +139,12 @@ function multiplication_division(equation) {
     }
     else if (equation[i] === "/") {
       let ans = +equation[i - 1] / +equation[i + 1];
+      equation.splice(i - 1, 3, ans);
+      i = 0;
+      length = equation.length;
+    }
+    else if (equation[i] === "%") {
+      let ans = +equation[i - 1] % +equation[i + 1];
       equation.splice(i - 1, 3, ans);
       i = 0;
       length = equation.length;
