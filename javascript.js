@@ -17,7 +17,7 @@
 
 
 
-console.log(calculate("( ( 10 / 2 ) + 1 ) * ( 3 - 1 )"));
+console.log(calculate("2 + 4 !"));
 
 
 
@@ -29,7 +29,7 @@ function calculate(equation) {
   }
 
   equation = parenthesis(equation);
-  equation = exponent_order(equation);
+  equation = exponent_order_factorial(equation);
   equation = multiplication_division(equation);
   equation = addition_subtraction(equation);
   
@@ -73,11 +73,24 @@ function parenthesis(equation) {
   return equation;
 }
 
-function exponent_order(equation) {
+function exponent_order_factorial(equation) {
   for (let i = 0, length = equation.length; i < length; i++) {
     if (equation[i] === "^") {
       let ans = (+equation[i - 1]) ** +equation[i + 1];
       equation.splice(i - 1, 3, ans);
+      i = 0;
+      length = equation.length;
+    }
+  }
+
+  for (let i = 0, length = equation.length; i < length; i++) {
+    if (equation[i] === "!") {
+      let ans = 1, num = equation[i - 1];
+      for (let i = 2; i <= num; i++) {
+        ans *= i;
+      }
+
+      equation.splice(i - 1, 2, ans);
       i = 0;
       length = equation.length;
     }
