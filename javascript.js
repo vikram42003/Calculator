@@ -17,7 +17,7 @@
 
 
 
-console.log(calculate("π"));
+console.log(calculate("π + 2"));
 
 
 
@@ -28,9 +28,14 @@ function calculate(equation) {
     return;
   }
 
+  // Convert the string to an array of numbers for each number or numberlike element
   if (!Array.isArray(equation)) {
-    equation = equation.trim().split(" ");
+    equation = equation.trim().split(" ").map(element => {
+      if (element === "π") return Number(Math.PI.toPrecision(7));
+      return Number(element) ? Number(element) : element
+    });
   }
+  console.log(equation);
 
   const flags = {
     par: 0,
