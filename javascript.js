@@ -17,7 +17,7 @@
 
 
 
-console.log(calculate("π + 2"));
+console.log(calculate("( 4 / 3 ) * π * 2 ^ 3"));
 
 
 
@@ -35,7 +35,6 @@ function calculate(equation) {
       return Number(element) ? Number(element) : element
     });
   }
-  console.log(equation);
 
   const flags = {
     par: 0,
@@ -90,13 +89,11 @@ function parenthesis(equation) {
       else if (equation[i] === ")") {
         parenthesisEndIndex = i;
         if (parenthesisStartIndex !== -1 && parenthesisEndIndex !== -1) {
-          console.log(equation);
           const subEquation = equation.slice(parenthesisStartIndex + 1, parenthesisEndIndex);
           const ans = calculate(subEquation);
 
           let toRemove = (parenthesisEndIndex + 1) - parenthesisStartIndex;
           equation.splice(parenthesisStartIndex, toRemove, ans);
-          console.log(equation);
         }
         break;
       }
@@ -110,7 +107,7 @@ function exponent_factorial(equation) {
   // Exponent
   for (let i = 0, length = equation.length; i < length; i++) {
     if (equation[i] === "^") {
-      let ans = (+equation[i - 1]) ** +equation[i + 1];
+      let ans = equation[i - 1] ** equation[i + 1];
       equation.splice(i - 1, 3, ans);
       i = 0;
       length = equation.length;
@@ -137,19 +134,19 @@ function exponent_factorial(equation) {
 function multiplication_division_modulus(equation) {
   for (let i = 0, length = equation.length; i < length; i++) {
     if (equation[i] === "*") {
-      let ans = +equation[i - 1] * +equation[i + 1];
+      let ans = equation[i - 1] * equation[i + 1];
       equation.splice(i - 1, 3, ans);
       i = 0;
       length = equation.length;
     }
     else if (equation[i] === "/") {
-      let ans = +equation[i - 1] / +equation[i + 1];
+      let ans = equation[i - 1] / equation[i + 1];
       equation.splice(i - 1, 3, ans);
       i = 0;
       length = equation.length;
     }
     else if (equation[i] === "%") {
-      let ans = +equation[i - 1] % +equation[i + 1];
+      let ans = equation[i - 1] % equation[i + 1];
       equation.splice(i - 1, 3, ans);
       i = 0;
       length = equation.length;
@@ -162,13 +159,13 @@ function multiplication_division_modulus(equation) {
 function addition_subtraction(equation) {
   for (let i = 0, length = equation.length; i < length; i++) {
     if (equation[i] === "+") {
-      let ans = +equation[i - 1] + +equation[i + 1];
+      let ans = equation[i - 1] + equation[i + 1];
       equation.splice(i - 1, 3, ans);
       i = 0;
       length = equation.length;
     }
     else if (equation[i] === "-") {
-      let ans = +equation[i - 1] - +equation[i + 1];
+      let ans = equation[i - 1] - equation[i + 1];
       equation.splice(i - 1, 3, ans);
       i = 0;
       length = equation.length;
