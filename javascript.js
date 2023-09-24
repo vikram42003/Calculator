@@ -11,13 +11,101 @@
   4)Display the final result
 */
 
+/* DA PLAN
+  1)if it a number add it to current num as a string to like build up the number
+    -treat dots the same
+  2)if it a 2 OPERAND OPP like +, -, *, /, %
+    -check if the latest item on the array IS NOT a 2 operand opp, if it is then do nothing
+    -convert the currentNum to a number and add it to the equation array
+    -after the number, add the opp to the array
+  3)on pressing = button
+    -convert the currentNum to number and add it to array
+    -calculate the results
+    -reset currentNum and the array
+    -add the result to the array so that it may be used to do future calculations
+*/
+
 
 
 "use strict";
 
+const equation = [];
+let currentNum = "";
+
+addEventListeners();
 
 
-console.log(calculate("( 4 / 3 ) * π * 2 ^ 3"));
+function addEventListeners() {
+  numbers_EL();
+  opp_2operand_EL();
+  clear_EL();
+  equals_EL();
+}
+
+function numbers_EL() {
+  const button_numbers = document.querySelectorAll(".numbers");
+
+  button_numbers.forEach((button) => button.addEventListener("click", addToCurrentnum));
+}
+
+function addToCurrentnum(event) {
+  // Register the pressed number by adding it to currentNum by extracting last character of ID name
+  currentNum += event.target.id.slice(-1);
+}
+
+function opp_2operand_EL() {
+  const opp_2 = document.querySelectorAll(".operators_2");
+
+  opp_2.forEach((button) => button.addEventListener("click", addOpp_2));
+}
+
+function addOpp_2(event) {
+  const prevItem = equation[equation.length - 1];
+  
+  if (prevItem === "+" || prevItem === "-" || prevItem === "*" || prevItem === "/" || prevItem === "%") {
+    console.log("trig");
+  }
+  else {
+    // add the number and then the pressed operator to the equation
+    equation.push(+currentNum);
+    currentNum = "";
+    equation.push(event.target.id.slice(-1));
+  }
+}
+
+function clear_EL() {
+  const button_AC = document.getElementById("button_AC");
+  const button_CE = document.getElementById("button_CE");
+
+  button_AC.addEventListener("click", () => {
+    equation = [];
+    currentNum = "";
+  });
+  button_CE.addEventListener("click", () => {
+    if (currentNum === "") equation.pop();
+    else currentNum = currentNum.slice(0, -1);
+  });
+}
+
+function equals_EL() {
+  const equals = document.getElementById("button_equals");
+
+  equals.addEventListener("click", displayAnswer);
+}
+
+function displayAnswer() {
+  equation.push(+currentNum);
+  currentNum = "";
+
+  const answer = calculate(equation);
+  console.log(answer);
+  // Emptying the array
+  equation.length = 0;
+  equation.push(answer);
+}
+
+
+// console.log(calculate("( 4 / 3 ) * π * 2 ^ 3"));
 
 
 

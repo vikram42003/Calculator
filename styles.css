@@ -100,3 +100,12 @@ p:first-child {
   position: sticky;
   padding: 0;
 }
+
+/* TEMP STUFF */
+.numbers,
+.operators_2,
+#button_AC,
+#button_CE,
+#button_equals {
+  background-color: aqua;
+}
