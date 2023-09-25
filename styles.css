@@ -104,6 +104,8 @@ p:first-child {
 /* TEMP STUFF */
 .numbers,
 .operators_2,
+#button_fact,
+#button_pi,
 #button_AC,
 #button_CE,
 #button_equals {

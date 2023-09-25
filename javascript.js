@@ -26,7 +26,6 @@
 */
 
 
-// add edge case for dot (.)
 // close any open parenthesis before passing the equation to calculate
 
 
@@ -40,6 +39,8 @@ addEventListeners();
 
 function addEventListeners() {
   numbers_EL();
+  pi_EL();
+  opp_1operand_EL();
   opp_2operand_EL();
   clear_EL();
   equals_EL();
@@ -53,10 +54,48 @@ function numbers_EL() {
 
 function addToCurrentnum(event) {
   // Register the pressed number by adding it to currentNum by extracting last character of ID name
-  if (currentNum = "" || event.target.id.slice(-1) === ".") {
+  //EDGECASE: If a number is pressed after closing bracket or pi then put a multiply sign in between
+  //Eg. (2+2)2 will become (2+2) * 2, π2 will become π * 2, so that it can work with calcuator function 
+  if (equation[equation.length - 1] === ")" || equation[equation.length - 1] === "π") {
+    equation.push("*");
+  }
+
+  if (currentNum === "" || event.target.id.slice(-1) === ".") {
     currentNum = "0."
   }
   currentNum += event.target.id.slice(-1);
+}
+
+function pi_EL() {
+  const button_pi = document.getElementById("button_pi");
+
+  button_pi.addEventListener("click", addPi);
+}
+
+function addPi() {
+  // Calculate function will convert it to the actual value of pi so add it as a string here
+  // EDGECASE: pi is pressed right after a number, after closing brackets or after another pi
+  // Eg. 2π will become 2 * π, (1+1)π will become (1+1) * π, πππ will become π * π * π
+  if (!currentNum === "" || equation[equation.length - 1] === ")" || equation[equation.length - 1] === "π") {
+    currentNum ? equation.push(+currentNum) : null;
+    currentNum ? currentNum = "" : null;
+    equation.push("*");
+  }
+  equation.push("π");
+}
+
+function opp_1operand_EL() {
+  const button_fact = document.getElementById("button_fact");
+
+  button_fact.addEventListener("click", addOpp_1);
+}
+
+function addOpp_1() {
+  if (!currentNum === "" || equation[equation.length - 1] === ")") {
+    currentNum ? equation.push(+currentNum) : null;
+    currentNum ? currentNum = "" : null;
+    equation.push("!");
+  }
 }
 
 function opp_2operand_EL() {
@@ -66,14 +105,16 @@ function opp_2operand_EL() {
 }
 
 function addOpp_2(event) {
-  //If user presses operator before entering any number then do nothing
-  /*But do allow operators after a ")" because in that case the equation in brackets will become an
+  /*EDGECASE: If user presses operator before entering any number then do nothing
+    EDGECASE: But do allow operators after a ")" because in that case the equation in brackets will become an
     an operand for the opeartor. eg. (1+1) * 2 will become 2 * 2 after brackets are evaluated so do allow this rule
     The opening brackets "(" will be handled by brackets function 2 * (1 + 1)
+    EDGECASE: Allow an operator input to be registered incase the previous element is the unary factorial("!") opreator
+    Eg. allow something like "5! + 3" to be legal
   */
-  if (!currentNum === "" || equation[equation.length - 1] === ")") {
-    equation.push(+currentNum);
-    currentNum = "";
+  if (!currentNum === "" || equation[equation.length - 1] === ")" || equation[equation.length - 1] === "!") {
+    currentNum ? equation.push(+currentNum) : null;
+    currentNum ? currentNum = "" : null;
     equation.push(event.target.id.slice(-1));
   }
 }
