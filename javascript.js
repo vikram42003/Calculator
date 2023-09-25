@@ -26,6 +26,9 @@
 */
 
 
+// add edge case for dot (.)
+// close any open parenthesis before passing the equation to calculate
+
 
 "use strict";
 
@@ -50,6 +53,9 @@ function numbers_EL() {
 
 function addToCurrentnum(event) {
   // Register the pressed number by adding it to currentNum by extracting last character of ID name
+  if (currentNum = "" || event.target.id.slice(-1) === ".") {
+    currentNum = "0."
+  }
   currentNum += event.target.id.slice(-1);
 }
 
@@ -60,13 +66,12 @@ function opp_2operand_EL() {
 }
 
 function addOpp_2(event) {
-  const prevItem = equation[equation.length - 1];
-  
-  if (prevItem === "+" || prevItem === "-" || prevItem === "*" || prevItem === "/" || prevItem === "%") {
-    console.log("trig");
-  }
-  else {
-    // add the number and then the pressed operator to the equation
+  //If user presses operator before entering any number then do nothing
+  /*But do allow operators after a ")" because in that case the equation in brackets will become an
+    an operand for the opeartor. eg. (1+1) * 2 will become 2 * 2 after brackets are evaluated so do allow this rule
+    The opening brackets "(" will be handled by brackets function 2 * (1 + 1)
+  */
+  if (!currentNum === "" || equation[equation.length - 1] === ")") {
     equation.push(+currentNum);
     currentNum = "";
     equation.push(event.target.id.slice(-1));
