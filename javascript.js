@@ -34,10 +34,17 @@
 // use this to do all the validity checks
 
 
+/* EDGE CASE LIST
+  1)Numbers
+    -no number has been entered but "." is pressed then add a 0 before it. Eg. make it 0.
+    -if a number is pressed after an ENDABLE then add a "*" sign before adding the number. Eg. 2! 2 will become 2! * 2
+*/
+
 "use strict";
 
-const NON_ENDABLES = ["+", "-", "*", "/", "^"];
-const ENDABLES = ["!", "π", "(", ")"];
+const NON_ENDABLES = ["+", "-", "*", "/", "%", "^"];
+// opening bracket "(" is not included in ENDABLES because it is handled as a special case
+const ENDABLES = ["!", "π", ")"];
 
 const equation = [];
 let currentNum = "";
@@ -62,8 +69,14 @@ function numbers_EL() {
   button_numbers.forEach((button) => button.addEventListener("click", addToCurrentnum));
 }
 
-function addToCurrentnum() {
-  
+function addToCurrentnum(event) {
+  if (ENDABLES.includes(equation[equation.length - 1])) {
+    equation.push("*");
+  }
+  if (currentNum === "" && event.target.id.slice(-1)) {
+    currentNum += "0.";
+  }
+  currentNum += event.target.id.slice(-1);
 }
 
 // function addToCurrentnum(event) {
