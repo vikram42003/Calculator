@@ -35,9 +35,14 @@
 
 
 /* EDGE CASE LIST
+    To think about edgecases, only concern yourself with the last pressed key on the calculator for every single key
   1)Numbers
     -no number has been entered but "." is pressed then add a 0 before it. Eg. make it 0.
     -if a number is pressed after an ENDABLE then add a "*" sign before adding the number. Eg. 2! 2 will become 2! * 2
+  2)Pi
+    -if pi is pressed after an ENDABLE then add a "*" before it. Eg. ππ will become π * π
+  3)factorial (1 operand operator)
+    -if "!" button is pressed after an ENDABLE then add a "*" before it.
 */
 
 "use strict";
@@ -49,15 +54,15 @@ const ENDABLES = ["!", "π", ")"];
 const equation = [];
 let currentNum = "";
 
-addEventListeners();
+// addEventListeners();
 
 
 
 function addEventListeners() {
   numbers_EL();
-  // pi_EL();
-  // opp_1operand_EL();
-  // opp_2operand_EL();
+  pi_EL();
+  opp_1operand_EL();
+  //operators_EL();
   // parenthesis_EL();
   // clear_EL();
   // equals_EL();
@@ -79,6 +84,32 @@ function addToCurrentnum(event) {
   currentNum += event.target.id.slice(-1);
 }
 
+function pi_EL() {
+  const button_pi = document.getElementById("button_pi");
+
+  button_pi.addEventListener("click", addPi);
+}
+
+function addPi() {
+  if (ENDABLES.includes(equation[equation.length - 1])) {
+    equation.push("*");
+  }
+  equation.push("π");
+}
+
+function opp_1operand_EL() {
+  const button_fact = document.getElementById("button_fact");
+
+  button_fact.addEventListener("click", addOpp_1);
+}
+
+function addOpp_1() {
+  if (ENDABLES.includes(equation[equation.length - 1])) {
+    equation.push("*");
+  }
+  equation.push("!");
+}
+
 // function addToCurrentnum(event) {
 //   // Register the pressed number by adding it to currentNum by extracting last character of ID name
 //   //EDGECASE: If a number is pressed after closing bracket or pi then put a multiply sign in between
@@ -93,12 +124,6 @@ function addToCurrentnum(event) {
 //   currentNum += event.target.id.slice(-1);
 // }
 
-// function pi_EL() {
-//   const button_pi = document.getElementById("button_pi");
-
-//   button_pi.addEventListener("click", addPi);
-// }
-
 // function addPi() {
 //   // Calculate function will convert it to the actual value of pi so add it as a string here
 //   // EDGECASE: pi is pressed right after a number, after closing brackets or after another pi
@@ -109,12 +134,6 @@ function addToCurrentnum(event) {
 //     equation.push("*");
 //   }
 //   equation.push("π");
-// }
-
-// function opp_1operand_EL() {
-//   const button_fact = document.getElementById("button_fact");
-
-//   button_fact.addEventListener("click", addOpp_1);
 // }
 
 // function addOpp_1() {
