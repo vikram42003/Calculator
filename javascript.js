@@ -42,13 +42,21 @@
   2)Pi
     -if pi is pressed after an ENDABLE then add a "*" before it. Eg. ππ will become π * π
   3)factorial (1 operand operator)
-    -if "!" is pressed and the element before it is NOT a number OR an ENDABLE then do nothing
-    -if "!" button is pressed after an ENDABLE then add a "*" before it
+    -if "!" is pressed and the element before it is NOT a number OR "π" OR ")" then do nothing
   4)Operators (+, -, *, /, %, ^)
     -if an operator is pressed and the element before it is NOT a number or an ENDABLE then do nothing
     -if an operators is pressed after another operator(NON_ENDABLES) then replace that operator with the new
     operator in the equations array. Eg. in 2+3+ , if * is pressed then it will be 2+3*
     -if an operator is pressed after an ENDABLE then skip adding currentNum since it will be empty and just add operator
+  5)Parenthesis
+    -if opening parenthesis("(") is pressed after a number then add a "*"
+    -if "(" is pressed after "!" or "π" then add a "*" before it. Eg. 2!(2) will become 2! * (2)
+    -if ")" is pressed right after "(" then remove the "(" and then do nothing since it will make no difference
+    Eg. 2 + (), will become 2 +
+    -if the element before ")" is a NON_ENDABLE then do nothing since it will make the equation invalid
+    -dont allow the user to enter more closing brackets than the opening brackets
+  ^)Equals (=)
+    -auto close all unclosed opening brackets when equals is pressed (TODO)
 */
 
 "use strict";
@@ -56,6 +64,8 @@
 const NON_ENDABLES = ["+", "-", "*", "/", "%", "^"];
 // opening bracket "(" is not included in ENDABLES because it is handled as a special case
 const ENDABLES = ["!", "π", ")"];
+let openingBrackets = 0;
+let closingBrackets = 0;
 
 const equation = [];
 let currentNum = "";
@@ -69,7 +79,7 @@ function addEventListeners() {
   pi_EL();
   opp_1operand_EL();
   operators_EL();
-  // parenthesis_EL();
+  parenthesis_EL();
   clear_EL();
   // equals_EL();
 }
@@ -110,11 +120,8 @@ function opp_1operand_EL() {
 }
 
 function addOpp_1() {
-  if (currentNum !== "" || ENDABLES.includes(equation[equation.length - 1])) {
-    if (ENDABLES.includes(equation[equation.length - 1])) {
-      equation.push("*");
-    }
-    if (currentNum !== "") {
+  if (!currentNum || equation[equation.lenght - 1] === ")" || equation[equation.length - 1] === "π") {
+    if (!currentNum) {
       equation.push(+currentNum);
       currentNum = "";
     }
@@ -129,17 +136,55 @@ function operators_EL() {
 }
 
 function addOperators(event) {
-  if (currentNum !== "" || ENDABLES.includes(equation[equation.length - 1])) {
+  if (!currentNum || ENDABLES.includes(equation[equation.length - 1])) {
     if (NON_ENDABLES.includes(equation[equation.length - 1])) {
       equation.pop();
       equation.push(event.target.id.slice(-1));
       return;
     }
-    if (currentNum !== "") {
+    if (!currentNum) {
       equation.push(+currentNum);
       currentNum = "";
     }
     equation.push(event.target.id.slice(-1));
+  }
+}
+
+function parenthesis_EL() {
+  const button_open = document.getElementById("button_open");
+  const button_close = document.getElementById("button_close");
+
+  button_open.addEventListener("click", addOpenParenthesis);
+  button_close.addEventListener("click", addCloseParenthesis);
+}
+
+function addOpenParenthesis() {
+  if (!currentNum) {
+    equation.push(+currentNum);
+    currentNum = "";
+    equation.push("*");
+  }
+  if (equation[equation.length - 1] === "π" || equation[equation.length - 1] === "!") {
+    equation.push("*");
+  }
+  openingBrackets++;
+  equation.push("(");
+}
+
+function addCloseParenthesis() {
+  if (closingBrackets >= openingBrackets) {
+    return;
+  }
+  if (equation[equation.length - 1] === "(") {
+    equation.pop();
+  }
+  if (!curentNum || ENDABLES.includes(equation[equation.length - 1])) {
+    if (!currentNum) {
+      equation.push(+currentNum);
+      currentNum = "";
+    }
+    closingBrackets++;
+    equation.push(")");
   }
 }
 
@@ -148,10 +193,15 @@ function clear_EL() {
   const button_CE = document.getElementById("button_CE");
 
   button_AC.addEventListener("click", () => {
-    equation = [];
+    equation.length = 0;
     currentNum = "";
+    openingBrackets = 0;
+    closingBrackets = 0;
   });
   button_CE.addEventListener("click", () => {
+    if (equation[equation.length - 1] === "(") openingBrackets--;
+    else if (equation[equation.length - 1] === ")") closingBrackets--;
+
     if (currentNum === "") equation.pop();
     else currentNum = currentNum.slice(0, -1);
   });
@@ -204,14 +254,6 @@ function clear_EL() {
 //     currentNum ? currentNum = "" : null;
 //     equation.push(event.target.id.slice(-1));
 //   }
-// }
-
-// function parenthesis_EL() {
-//   const button_open = document.getElementById("button_open");
-//   const button_close = document.getElementById("button_close");
-
-//   button_open.addEventListener("click", addOpenParenthesis);
-//   button_close.addEventListener("click", addCloseParenthesis);
 // }
 
 // function addOpenParenthesis() {

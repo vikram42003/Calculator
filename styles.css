@@ -106,8 +106,9 @@ p:first-child {
 .operators_2,
 #button_fact,
 #button_pi,
+#button_open,
+#button_close,
 #button_AC,
-#button_CE,
-#button_equals {
+#button_CE {
   background-color: aqua;
 }
