@@ -42,7 +42,13 @@
   2)Pi
     -if pi is pressed after an ENDABLE then add a "*" before it. Eg. ππ will become π * π
   3)factorial (1 operand operator)
-    -if "!" button is pressed after an ENDABLE then add a "*" before it.
+    -if "!" is pressed and the element before it is NOT a number OR an ENDABLE then do nothing
+    -if "!" button is pressed after an ENDABLE then add a "*" before it
+  4)Operators (+, -, *, /, %, ^)
+    -if an operator is pressed and the element before it is NOT a number or an ENDABLE then do nothing
+    -if an operators is pressed after another operator(NON_ENDABLES) then replace that operator with the new
+    operator in the equations array. Eg. in 2+3+ , if * is pressed then it will be 2+3*
+    -if an operator is pressed after an ENDABLE then skip adding currentNum since it will be empty and just add operator
 */
 
 "use strict";
@@ -62,9 +68,9 @@ function addEventListeners() {
   numbers_EL();
   pi_EL();
   opp_1operand_EL();
-  //operators_EL();
+  operators_EL();
   // parenthesis_EL();
-  // clear_EL();
+  clear_EL();
   // equals_EL();
 }
 
@@ -104,10 +110,51 @@ function opp_1operand_EL() {
 }
 
 function addOpp_1() {
-  if (ENDABLES.includes(equation[equation.length - 1])) {
-    equation.push("*");
+  if (currentNum !== "" || ENDABLES.includes(equation[equation.length - 1])) {
+    if (ENDABLES.includes(equation[equation.length - 1])) {
+      equation.push("*");
+    }
+    if (currentNum !== "") {
+      equation.push(+currentNum);
+      currentNum = "";
+    }
+    equation.push("!");
   }
-  equation.push("!");
+}
+
+function operators_EL() {
+  const operators = document.querySelectorAll(".operators_2");
+
+  operators.forEach((button) => button.addEventListener("click", addOperators));
+}
+
+function addOperators(event) {
+  if (currentNum !== "" || ENDABLES.includes(equation[equation.length - 1])) {
+    if (NON_ENDABLES.includes(equation[equation.length - 1])) {
+      equation.pop();
+      equation.push(event.target.id.slice(-1));
+      return;
+    }
+    if (currentNum !== "") {
+      equation.push(+currentNum);
+      currentNum = "";
+    }
+    equation.push(event.target.id.slice(-1));
+  }
+}
+
+function clear_EL() {
+  const button_AC = document.getElementById("button_AC");
+  const button_CE = document.getElementById("button_CE");
+
+  button_AC.addEventListener("click", () => {
+    equation = [];
+    currentNum = "";
+  });
+  button_CE.addEventListener("click", () => {
+    if (currentNum === "") equation.pop();
+    else currentNum = currentNum.slice(0, -1);
+  });
 }
 
 // function addToCurrentnum(event) {
@@ -144,12 +191,6 @@ function addOpp_1() {
 //   }
 // }
 
-// function opp_2operand_EL() {
-//   const opp_2 = document.querySelectorAll(".operators_2");
-
-//   opp_2.forEach((button) => button.addEventListener("click", addOpp_2));
-// }
-
 // function addOpp_2(event) {
 //   /*EDGECASE: If user presses operator before entering any number then do nothing
 //     EDGECASE: But do allow operators after a ")" because in that case the equation in brackets will become an
@@ -175,20 +216,6 @@ function addOpp_1() {
 
 // function addOpenParenthesis() {
 
-// }
-
-// function clear_EL() {
-//   const button_AC = document.getElementById("button_AC");
-//   const button_CE = document.getElementById("button_CE");
-
-//   button_AC.addEventListener("click", () => {
-//     equation = [];
-//     currentNum = "";
-//   });
-//   button_CE.addEventListener("click", () => {
-//     if (currentNum === "") equation.pop();
-//     else currentNum = currentNum.slice(0, -1);
-//   });
 // }
 
 // function equals_EL() {
