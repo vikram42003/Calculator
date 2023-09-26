@@ -28,6 +28,11 @@
 
 // close any open parenthesis before passing the equation to calculate
 
+// IDEA
+// add a non-endable characters array of operators on which the equation cannot end like (+, -, *, /, %, ^)
+// add another array of endables like (numbers, !, "(", ")")
+// use this to do all the validity checks
+
 
 "use strict";
 
@@ -42,6 +47,7 @@ function addEventListeners() {
   pi_EL();
   opp_1operand_EL();
   opp_2operand_EL();
+  parenthesis_EL();
   clear_EL();
   equals_EL();
 }
@@ -117,6 +123,18 @@ function addOpp_2(event) {
     currentNum ? currentNum = "" : null;
     equation.push(event.target.id.slice(-1));
   }
+}
+
+function parenthesis_EL() {
+  const button_open = document.getElementById("button_open");
+  const button_close = document.getElementById("button_close");
+
+  button_open.addEventListener("click", addOpenParenthesis);
+  button_close.addEventListener("click", addCloseParenthesis);
+}
+
+function addOpenParenthesis() {
+
 }
 
 function clear_EL() {
