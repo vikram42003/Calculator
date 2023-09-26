@@ -36,20 +36,24 @@
 
 "use strict";
 
+const NON_ENDABLES = ["+", "-", "*", "/", "^"];
+const ENDABLES = ["!", "π", "(", ")"];
+
 const equation = [];
 let currentNum = "";
 
 addEventListeners();
 
 
+
 function addEventListeners() {
   numbers_EL();
-  pi_EL();
-  opp_1operand_EL();
-  opp_2operand_EL();
-  parenthesis_EL();
-  clear_EL();
-  equals_EL();
+  // pi_EL();
+  // opp_1operand_EL();
+  // opp_2operand_EL();
+  // parenthesis_EL();
+  // clear_EL();
+  // equals_EL();
 }
 
 function numbers_EL() {
@@ -58,115 +62,119 @@ function numbers_EL() {
   button_numbers.forEach((button) => button.addEventListener("click", addToCurrentnum));
 }
 
-function addToCurrentnum(event) {
-  // Register the pressed number by adding it to currentNum by extracting last character of ID name
-  //EDGECASE: If a number is pressed after closing bracket or pi then put a multiply sign in between
-  //Eg. (2+2)2 will become (2+2) * 2, π2 will become π * 2, so that it can work with calcuator function 
-  if (equation[equation.length - 1] === ")" || equation[equation.length - 1] === "π") {
-    equation.push("*");
-  }
-
-  if (currentNum === "" || event.target.id.slice(-1) === ".") {
-    currentNum = "0."
-  }
-  currentNum += event.target.id.slice(-1);
+function addToCurrentnum() {
+  
 }
 
-function pi_EL() {
-  const button_pi = document.getElementById("button_pi");
+// function addToCurrentnum(event) {
+//   // Register the pressed number by adding it to currentNum by extracting last character of ID name
+//   //EDGECASE: If a number is pressed after closing bracket or pi then put a multiply sign in between
+//   //Eg. (2+2)2 will become (2+2) * 2, π2 will become π * 2, so that it can work with calcuator function 
+//   if (equation[equation.length - 1] === ")" || equation[equation.length - 1] === "π") {
+//     equation.push("*");
+//   }
 
-  button_pi.addEventListener("click", addPi);
-}
+//   if (currentNum === "" || event.target.id.slice(-1) === ".") {
+//     currentNum = "0."
+//   }
+//   currentNum += event.target.id.slice(-1);
+// }
 
-function addPi() {
-  // Calculate function will convert it to the actual value of pi so add it as a string here
-  // EDGECASE: pi is pressed right after a number, after closing brackets or after another pi
-  // Eg. 2π will become 2 * π, (1+1)π will become (1+1) * π, πππ will become π * π * π
-  if (!currentNum === "" || equation[equation.length - 1] === ")" || equation[equation.length - 1] === "π") {
-    currentNum ? equation.push(+currentNum) : null;
-    currentNum ? currentNum = "" : null;
-    equation.push("*");
-  }
-  equation.push("π");
-}
+// function pi_EL() {
+//   const button_pi = document.getElementById("button_pi");
 
-function opp_1operand_EL() {
-  const button_fact = document.getElementById("button_fact");
+//   button_pi.addEventListener("click", addPi);
+// }
 
-  button_fact.addEventListener("click", addOpp_1);
-}
+// function addPi() {
+//   // Calculate function will convert it to the actual value of pi so add it as a string here
+//   // EDGECASE: pi is pressed right after a number, after closing brackets or after another pi
+//   // Eg. 2π will become 2 * π, (1+1)π will become (1+1) * π, πππ will become π * π * π
+//   if (!currentNum === "" || equation[equation.length - 1] === ")" || equation[equation.length - 1] === "π") {
+//     currentNum ? equation.push(+currentNum) : null;
+//     currentNum ? currentNum = "" : null;
+//     equation.push("*");
+//   }
+//   equation.push("π");
+// }
 
-function addOpp_1() {
-  if (!currentNum === "" || equation[equation.length - 1] === ")") {
-    currentNum ? equation.push(+currentNum) : null;
-    currentNum ? currentNum = "" : null;
-    equation.push("!");
-  }
-}
+// function opp_1operand_EL() {
+//   const button_fact = document.getElementById("button_fact");
 
-function opp_2operand_EL() {
-  const opp_2 = document.querySelectorAll(".operators_2");
+//   button_fact.addEventListener("click", addOpp_1);
+// }
 
-  opp_2.forEach((button) => button.addEventListener("click", addOpp_2));
-}
+// function addOpp_1() {
+//   if (!currentNum === "" || equation[equation.length - 1] === ")") {
+//     currentNum ? equation.push(+currentNum) : null;
+//     currentNum ? currentNum = "" : null;
+//     equation.push("!");
+//   }
+// }
 
-function addOpp_2(event) {
-  /*EDGECASE: If user presses operator before entering any number then do nothing
-    EDGECASE: But do allow operators after a ")" because in that case the equation in brackets will become an
-    an operand for the opeartor. eg. (1+1) * 2 will become 2 * 2 after brackets are evaluated so do allow this rule
-    The opening brackets "(" will be handled by brackets function 2 * (1 + 1)
-    EDGECASE: Allow an operator input to be registered incase the previous element is the unary factorial("!") opreator
-    Eg. allow something like "5! + 3" to be legal
-  */
-  if (!currentNum === "" || equation[equation.length - 1] === ")" || equation[equation.length - 1] === "!") {
-    currentNum ? equation.push(+currentNum) : null;
-    currentNum ? currentNum = "" : null;
-    equation.push(event.target.id.slice(-1));
-  }
-}
+// function opp_2operand_EL() {
+//   const opp_2 = document.querySelectorAll(".operators_2");
 
-function parenthesis_EL() {
-  const button_open = document.getElementById("button_open");
-  const button_close = document.getElementById("button_close");
+//   opp_2.forEach((button) => button.addEventListener("click", addOpp_2));
+// }
 
-  button_open.addEventListener("click", addOpenParenthesis);
-  button_close.addEventListener("click", addCloseParenthesis);
-}
+// function addOpp_2(event) {
+//   /*EDGECASE: If user presses operator before entering any number then do nothing
+//     EDGECASE: But do allow operators after a ")" because in that case the equation in brackets will become an
+//     an operand for the opeartor. eg. (1+1) * 2 will become 2 * 2 after brackets are evaluated so do allow this rule
+//     The opening brackets "(" will be handled by brackets function 2 * (1 + 1)
+//     EDGECASE: Allow an operator input to be registered incase the previous element is the unary factorial("!") opreator
+//     Eg. allow something like "5! + 3" to be legal
+//   */
+//   if (!currentNum === "" || equation[equation.length - 1] === ")" || equation[equation.length - 1] === "!") {
+//     currentNum ? equation.push(+currentNum) : null;
+//     currentNum ? currentNum = "" : null;
+//     equation.push(event.target.id.slice(-1));
+//   }
+// }
 
-function addOpenParenthesis() {
+// function parenthesis_EL() {
+//   const button_open = document.getElementById("button_open");
+//   const button_close = document.getElementById("button_close");
 
-}
+//   button_open.addEventListener("click", addOpenParenthesis);
+//   button_close.addEventListener("click", addCloseParenthesis);
+// }
 
-function clear_EL() {
-  const button_AC = document.getElementById("button_AC");
-  const button_CE = document.getElementById("button_CE");
+// function addOpenParenthesis() {
 
-  button_AC.addEventListener("click", () => {
-    equation = [];
-    currentNum = "";
-  });
-  button_CE.addEventListener("click", () => {
-    if (currentNum === "") equation.pop();
-    else currentNum = currentNum.slice(0, -1);
-  });
-}
+// }
 
-function equals_EL() {
-  const equals = document.getElementById("button_equals");
+// function clear_EL() {
+//   const button_AC = document.getElementById("button_AC");
+//   const button_CE = document.getElementById("button_CE");
 
-  equals.addEventListener("click", displayAnswer);
-}
+//   button_AC.addEventListener("click", () => {
+//     equation = [];
+//     currentNum = "";
+//   });
+//   button_CE.addEventListener("click", () => {
+//     if (currentNum === "") equation.pop();
+//     else currentNum = currentNum.slice(0, -1);
+//   });
+// }
 
-function displayAnswer() {
-  equation.push(+currentNum);
-  currentNum = "";
+// function equals_EL() {
+//   const equals = document.getElementById("button_equals");
 
-  const answer = calculate(equation);
-  console.log(answer);
-  // Emptying the array
-  equation.length = 0;
-  equation.push(answer);
-}
+//   equals.addEventListener("click", displayAnswer);
+// }
+
+// function displayAnswer() {
+//   equation.push(+currentNum);
+//   currentNum = "";
+
+//   const answer = calculate(equation);
+//   console.log(answer);
+//   // Emptying the array
+//   equation.length = 0;
+//   equation.push(answer);
+// }
 
 
 // console.log(calculate("( 4 / 3 ) * π * 2 ^ 3"));
