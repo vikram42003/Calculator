@@ -25,9 +25,6 @@
     -add the result to the array so that it may be used to do future calculations
 */
 
-
-// close any open parenthesis before passing the equation to calculate
-
 // IDEA
 // add a non-endable characters array of operators on which the equation cannot end like (+, -, *, /, %, ^)
 // add another array of endables like (numbers, !, "(", ")")
@@ -55,8 +52,11 @@
     Eg. 2 + (), will become 2 +
     -if the element before ")" is a NON_ENDABLE then do nothing since it will make the equation invalid
     -dont allow the user to enter more closing brackets than the opening brackets
-  ^)Equals (=)
-    -auto close all unclosed opening brackets when equals is pressed (TODO)
+  6)Equals (=)
+    -if one or less than one elements have been entered then do nothing
+    -auto close all unclosed opening brackets when equals is pressed
+    -if the equation ends at an operator (NON_ENDABLE) then do nothing
+    -if the equation ends at a "(" then just pop it out before running the checks
 */
 
 "use strict";
@@ -81,7 +81,7 @@ function addEventListeners() {
   operators_EL();
   parenthesis_EL();
   clear_EL();
-  // equals_EL();
+  equals_EL();
 }
 
 function numbers_EL() {
@@ -207,75 +207,37 @@ function clear_EL() {
   });
 }
 
-// function addToCurrentnum(event) {
-//   // Register the pressed number by adding it to currentNum by extracting last character of ID name
-//   //EDGECASE: If a number is pressed after closing bracket or pi then put a multiply sign in between
-//   //Eg. (2+2)2 will become (2+2) * 2, π2 will become π * 2, so that it can work with calcuator function 
-//   if (equation[equation.length - 1] === ")" || equation[equation.length - 1] === "π") {
-//     equation.push("*");
-//   }
+function equals_EL() {
+  const equals = document.getElementById("button_equals");
 
-//   if (currentNum === "" || event.target.id.slice(-1) === ".") {
-//     currentNum = "0."
-//   }
-//   currentNum += event.target.id.slice(-1);
-// }
+  equals.addEventListener("click", equals);
+}
 
-// function addPi() {
-//   // Calculate function will convert it to the actual value of pi so add it as a string here
-//   // EDGECASE: pi is pressed right after a number, after closing brackets or after another pi
-//   // Eg. 2π will become 2 * π, (1+1)π will become (1+1) * π, πππ will become π * π * π
-//   if (!currentNum === "" || equation[equation.length - 1] === ")" || equation[equation.length - 1] === "π") {
-//     currentNum ? equation.push(+currentNum) : null;
-//     currentNum ? currentNum = "" : null;
-//     equation.push("*");
-//   }
-//   equation.push("π");
-// }
+function equals() {
+  if (equation.length > 1) {
+    if (equation[equation.length - 1] === "(") {
+      equation.pop();
+    }
+    
+    if (!currentNum || ENDABLES.includes(equation[equation.length - 1])) {
+      if (!currentNum) {
+        equation.push(+currentNum);
+        currentNum = "";
+      }
 
-// function addOpp_1() {
-//   if (!currentNum === "" || equation[equation.length - 1] === ")") {
-//     currentNum ? equation.push(+currentNum) : null;
-//     currentNum ? currentNum = "" : null;
-//     equation.push("!");
-//   }
-// }
+      while (openingBrackets > closingBrackets) {
+        equation.push(")");
+        closingBrackets++;
+      }
 
-// function addOpp_2(event) {
-//   /*EDGECASE: If user presses operator before entering any number then do nothing
-//     EDGECASE: But do allow operators after a ")" because in that case the equation in brackets will become an
-//     an operand for the opeartor. eg. (1+1) * 2 will become 2 * 2 after brackets are evaluated so do allow this rule
-//     The opening brackets "(" will be handled by brackets function 2 * (1 + 1)
-//     EDGECASE: Allow an operator input to be registered incase the previous element is the unary factorial("!") opreator
-//     Eg. allow something like "5! + 3" to be legal
-//   */
-//   if (!currentNum === "" || equation[equation.length - 1] === ")" || equation[equation.length - 1] === "!") {
-//     currentNum ? equation.push(+currentNum) : null;
-//     currentNum ? currentNum = "" : null;
-//     equation.push(event.target.id.slice(-1));
-//   }
-// }
+      const answer = calculate(equation);
+      console.log(answer);
 
-// function addOpenParenthesis() {
-
-// }
-
-// function equals_EL() {
-//   const equals = document.getElementById("button_equals");
-
-//   equals.addEventListener("click", displayAnswer);
-// }
-
-// function displayAnswer() {
-//   equation.push(+currentNum);
-//   currentNum = "";
-
-//   const answer = calculate(equation);
-//   console.log(answer);
-//   // Emptying the array
-//   equation.length = 0;
-//   equation.push(answer);
-// }
+      equation.length = 0;
+      equation.push(answer);
+    }
+  }
+}
 
 
 // console.log(calculate("( 4 / 3 ) * π * 2 ^ 3"));
