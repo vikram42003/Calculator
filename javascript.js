@@ -70,7 +70,7 @@ let closingBrackets = 0;
 const equation = [];
 let currentNum = "";
 
-// addEventListeners();
+addEventListeners();
 
 
 
@@ -82,6 +82,10 @@ function addEventListeners() {
   parenthesis_EL();
   clear_EL();
   equals_EL();
+}
+
+function printFullEquation() {
+  console.log(`${equation.join(" ")} ${currentNum}`);
 }
 
 function numbers_EL() {
@@ -98,6 +102,7 @@ function addToCurrentnum(event) {
     currentNum += "0.";
   }
   currentNum += event.target.id.slice(-1);
+  printFullEquation();
 }
 
 function pi_EL() {
@@ -111,6 +116,7 @@ function addPi() {
     equation.push("*");
   }
   equation.push("π");
+  printFullEquation();
 }
 
 function opp_1operand_EL() {
@@ -127,6 +133,7 @@ function addOpp_1() {
     }
     equation.push("!");
   }
+  printFullEquation();
 }
 
 function operators_EL() {
@@ -148,6 +155,7 @@ function addOperators(event) {
     }
     equation.push(event.target.id.slice(-1));
   }
+  printFullEquation();
 }
 
 function parenthesis_EL() {
@@ -169,6 +177,7 @@ function addOpenParenthesis() {
   }
   openingBrackets++;
   equation.push("(");
+  printFullEquation();
 }
 
 function addCloseParenthesis() {
@@ -186,6 +195,7 @@ function addCloseParenthesis() {
     closingBrackets++;
     equation.push(")");
   }
+  printFullEquation();
 }
 
 function clear_EL() {
@@ -197,6 +207,7 @@ function clear_EL() {
     currentNum = "";
     openingBrackets = 0;
     closingBrackets = 0;
+    printFullEquation();
   });
   button_CE.addEventListener("click", () => {
     if (equation[equation.length - 1] === "(") openingBrackets--;
@@ -204,6 +215,7 @@ function clear_EL() {
 
     if (currentNum === "") equation.pop();
     else currentNum = currentNum.slice(0, -1);
+    printFullEquation();
   });
 }
 
@@ -237,6 +249,7 @@ function equals() {
       equation.push(answer);
     }
   }
+  printFullEquation();
 }
 
 

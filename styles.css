@@ -109,6 +109,7 @@ p:first-child {
 #button_open,
 #button_close,
 #button_AC,
-#button_CE {
+#button_CE,
+#button_equals {
   background-color: aqua;
 }
