@@ -41,6 +41,7 @@
   3)factorial (1 operand operator)
     -if "!" is pressed and the element before it is NOT a number OR "π" OR ")" then do nothing
   4)Operators (+, -, *, /, %, ^)
+    --- ADD SUPPORT FOR NEGATIVE NUMBERS !!!!
     -if an operator is pressed and the element before it is NOT a number or an ENDABLE then do nothing
     -if an operators is pressed after another operator(NON_ENDABLES) then replace that operator with the new
     operator in the equations array. Eg. in 2+3+ , if * is pressed then it will be 2+3*
@@ -98,7 +99,7 @@ function addToCurrentnum(event) {
   if (ENDABLES.includes(equation[equation.length - 1])) {
     equation.push("*");
   }
-  if (currentNum === "" && event.target.id.slice(-1)) {
+  if (currentNum === "" && event.target.id.slice(-1) === ".") {
     currentNum += "0.";
   }
   currentNum += event.target.id.slice(-1);
@@ -126,8 +127,8 @@ function opp_1operand_EL() {
 }
 
 function addOpp_1() {
-  if (!currentNum || equation[equation.lenght - 1] === ")" || equation[equation.length - 1] === "π") {
-    if (!currentNum) {
+  if (currentNum || equation[equation.lenght - 1] === ")" || equation[equation.length - 1] === "π") {
+    if (currentNum) {
       equation.push(+currentNum);
       currentNum = "";
     }
@@ -143,13 +144,13 @@ function operators_EL() {
 }
 
 function addOperators(event) {
-  if (!currentNum || ENDABLES.includes(equation[equation.length - 1])) {
+  if (currentNum || ENDABLES.includes(equation[equation.length - 1])) {
     if (NON_ENDABLES.includes(equation[equation.length - 1])) {
       equation.pop();
       equation.push(event.target.id.slice(-1));
       return;
     }
-    if (!currentNum) {
+    if (currentNum) {
       equation.push(+currentNum);
       currentNum = "";
     }
@@ -167,7 +168,7 @@ function parenthesis_EL() {
 }
 
 function addOpenParenthesis() {
-  if (!currentNum) {
+  if (currentNum) {
     equation.push(+currentNum);
     currentNum = "";
     equation.push("*");
@@ -187,8 +188,8 @@ function addCloseParenthesis() {
   if (equation[equation.length - 1] === "(") {
     equation.pop();
   }
-  if (!curentNum || ENDABLES.includes(equation[equation.length - 1])) {
-    if (!currentNum) {
+  if (curentNum || ENDABLES.includes(equation[equation.length - 1])) {
+    if (currentNum) {
       equation.push(+currentNum);
       currentNum = "";
     }
@@ -222,17 +223,17 @@ function clear_EL() {
 function equals_EL() {
   const equals = document.getElementById("button_equals");
 
-  equals.addEventListener("click", equals);
+  equals.addEventListener("click", printResult);
 }
 
-function equals() {
+function printResult() {
   if (equation.length > 1) {
     if (equation[equation.length - 1] === "(") {
       equation.pop();
     }
     
-    if (!currentNum || ENDABLES.includes(equation[equation.length - 1])) {
-      if (!currentNum) {
+    if (currentNum || ENDABLES.includes(equation[equation.length - 1])) {
+      if (currentNum) {
         equation.push(+currentNum);
         currentNum = "";
       }
@@ -262,14 +263,6 @@ function equals() {
 function calculate(equation) {
   if(!equation) {
     return;
-  }
-
-  // Convert the string to an array of numbers for each number or numberlike element
-  if (!Array.isArray(equation)) {
-    equation = equation.trim().split(" ").map(element => {
-      if (element === "π") return Number(Math.PI.toPrecision(7));
-      return Number(element) ? Number(element) : element
-    });
   }
 
   const flags = {
