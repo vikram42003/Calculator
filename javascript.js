@@ -86,7 +86,9 @@ function addEventListeners() {
 }
 
 function printFullEquation() {
-  console.log(`${equation.join(" ")} ${currentNum}`);
+  const displayText = document.querySelector(".display-text");
+
+  displayText.textContent = `${equation.join(" ")} ${currentNum}`;
 }
 
 function numbers_EL() {
@@ -127,7 +129,8 @@ function opp_1operand_EL() {
 }
 
 function addOpp_1() {
-  if (currentNum || equation[equation.lenght - 1] === ")" || equation[equation.length - 1] === "π") {
+  if (currentNum || isFinite(equation[equation.length - 1]) 
+      || equation[equation.lenght - 1] === ")" || equation[equation.length - 1] === "π") {
     if (currentNum) {
       equation.push(+currentNum);
       currentNum = "";
@@ -144,7 +147,7 @@ function operators_EL() {
 }
 
 function addOperators(event) {
-  if (currentNum || ENDABLES.includes(equation[equation.length - 1])) {
+  if (currentNum || isFinite(equation[equation.length - 1]) || ENDABLES.includes(equation[equation.length - 1])) {
     if (NON_ENDABLES.includes(equation[equation.length - 1])) {
       equation.pop();
       equation.push(event.target.id.slice(-1));

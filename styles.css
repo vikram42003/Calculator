@@ -51,9 +51,21 @@ body * {
 }
 
 .display {
-  background-color: white;
+  background-color: var(--history-box-bg-color);
   margin: 20px 16px;
   height: 100px;
+  display: flex;
+  align-items: center;
+}
+
+.display-text {
+  width: 100%;
+  margin: 0;
+  font-size: 1.7rem;
+  text-align: end;
+  line-height: 2;
+  vertical-align: auto;
+  overflow-x: scroll;
 }
 
 .buttons-container {
@@ -95,21 +107,8 @@ p {
   padding-right: 5%;
 }
 
-p:first-child {
+.history-container > p:first-child {
   text-align: center;
   position: sticky;
   padding: 0;
-}
-
-/* TEMP STUFF */
-.numbers,
-.operators_2,
-#button_fact,
-#button_pi,
-#button_open,
-#button_close,
-#button_AC,
-#button_CE,
-#button_equals {
-  background-color: aqua;
 }
