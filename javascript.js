@@ -76,6 +76,7 @@ addEventListeners();
 
 
 function addEventListeners() {
+  keyPress_EL();
   numbers_EL();
   pi_EL();
   opp_1operand_EL();
@@ -83,6 +84,41 @@ function addEventListeners() {
   parenthesis_EL();
   clear_EL();
   equals_EL();
+}
+
+function keyPress_EL() {
+  document.addEventListener("keydown", (event) => {
+    if (isFinite(event.key) || event.key === ".") {
+      addToCurrentnum(event);
+    }
+    else if (NON_ENDABLES.includes(event.key)) {
+      addOperators(event);
+    }
+
+    switch (event.key) {
+      case "Enter":
+        printResult();
+        return;
+      case "`":
+        addPi();
+        return;
+      case "(":
+        addOpenParenthesis();
+        return;
+      case ")":
+        addCloseParenthesis();
+        return;
+      case "!":
+        addOpp_1();
+        return;
+      case "Backspace":
+        clearEntry();
+        return;
+      case "Delete":
+        allClear();
+        return;
+    };
+  })
 }
 
 function printFullEquation() {
@@ -98,13 +134,14 @@ function numbers_EL() {
 }
 
 function addToCurrentnum(event) {
+  const key = event.target.id.slice(-1) === "" ? event.key : event.target.id.slice(-1);
   if (ENDABLES.includes(equation[equation.length - 1])) {
     equation.push("*");
   }
-  if (currentNum === "" && event.target.id.slice(-1) === ".") {
+  if (currentNum === "" && key === ".") {
     currentNum += "0.";
   }
-  currentNum += event.target.id.slice(-1);
+  currentNum += key;
   printFullEquation();
 }
 
@@ -147,17 +184,18 @@ function operators_EL() {
 }
 
 function addOperators(event) {
+  const key = event.target.id.slice(-1) === "" ? event.key : event.target.id.slice(-1);
   if (currentNum || isFinite(equation[equation.length - 1]) || ENDABLES.includes(equation[equation.length - 1])) {
     if (NON_ENDABLES.includes(equation[equation.length - 1])) {
       equation.pop();
-      equation.push(event.target.id.slice(-1));
+      equation.push(key);
       return;
     }
     if (currentNum) {
       equation.push(+currentNum);
       currentNum = "";
     }
-    equation.push(event.target.id.slice(-1));
+    equation.push(key);
   }
   printFullEquation();
 }
@@ -206,21 +244,25 @@ function clear_EL() {
   const button_AC = document.getElementById("button_AC");
   const button_CE = document.getElementById("button_CE");
 
-  button_AC.addEventListener("click", () => {
-    equation.length = 0;
-    currentNum = "";
-    openingBrackets = 0;
-    closingBrackets = 0;
-    printFullEquation();
-  });
-  button_CE.addEventListener("click", () => {
-    if (equation[equation.length - 1] === "(") openingBrackets--;
-    else if (equation[equation.length - 1] === ")") closingBrackets--;
+  button_AC.addEventListener("click", allClear);
+  button_CE.addEventListener("click", clearEntry);
+}
 
-    if (currentNum === "") equation.pop();
-    else currentNum = currentNum.slice(0, -1);
-    printFullEquation();
-  });
+function allClear() {
+  equation.length = 0;
+  currentNum = "";
+  openingBrackets = 0;
+  closingBrackets = 0;
+  printFullEquation();
+}
+
+function clearEntry() {
+  if (equation[equation.length - 1] === "(") openingBrackets--;
+  else if (equation[equation.length - 1] === ")") closingBrackets--;
+
+  if (currentNum === "") equation.pop();
+  else currentNum = currentNum.slice(0, -1);
+  printFullEquation();
 }
 
 function equals_EL() {
@@ -250,7 +292,7 @@ function printResult() {
       console.log(answer);
 
       equation.length = 0;
-      equation.push(answer);
+      currentNum = String(answer);
     }
   }
   printFullEquation();
