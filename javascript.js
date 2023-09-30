@@ -1,35 +1,4 @@
-/*  CALCULATOR V1
-  1)Take input from the user one button at a time
-  2)Read the input -
-    -If input does not end on a number then display message "input incomplete"
-      OR the "=" button does nothing
-  3)Evaluate input using PEDMAS/BODMAS- eg. 3 - 9 + 3 * 2² / (2 + 2)
-    -Evaluate PARENTHESIS/BRACKETS and return evaluated calcualtion eg. 3 - 9 + 3 * 2² / 4
-    -Evaluate EXPONENTS/ORDER and return evaluated calculation eg. 3 - 9 + 3 * 4 / 4
-    -Evaluate MULTIPLICATIONS AND DIVISIONS FROM LEFT TO RIGHT and return evaluated calculation eg. 3 - 9 + 3
-    -Evaluate ADDITIONS AND SUBTRACTIONS FROM LEFT TO RIGHT and return evaluated calculation eg. -3
-  4)Display the final result
-*/
-
-/* DA PLAN
-  1)if it a number add it to current num as a string to like build up the number
-    -treat dots the same
-  2)if it a 2 OPERAND OPP like +, -, *, /, %
-    -check if the latest item on the array IS NOT a 2 operand opp, if it is then do nothing
-    -convert the currentNum to a number and add it to the equation array
-    -after the number, add the opp to the array
-  3)on pressing = button
-    -convert the currentNum to number and add it to array
-    -calculate the results
-    -reset currentNum and the array
-    -add the result to the array so that it may be used to do future calculations
-*/
-
-// IDEA
-// add a non-endable characters array of operators on which the equation cannot end like (+, -, *, /, %, ^)
-// add another array of endables like (numbers, !, "(", ")")
-// use this to do all the validity checks
-
+/*  CALCULATOR V2  */
 
 /* EDGE CASE LIST
     To think about edgecases, only concern yourself with the last pressed key on the calculator for every single key
