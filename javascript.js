@@ -58,6 +58,7 @@
     -auto close all unclosed opening brackets when equals is pressed
     -if the equation ends at an operator (NON_ENDABLE) then do nothing
     -if the equation ends at a "(" then just pop it out before running the checks
+    -convert the "π" to the value of pi upto 6 digits
 */
 
 "use strict";
@@ -68,7 +69,7 @@ const ENDABLES = ["!", "π", ")"];
 let openingBrackets = 0;
 let closingBrackets = 0;
 
-const equation = [];
+let equation = [];
 let currentNum = "";
 
 addEventListeners();
@@ -186,14 +187,12 @@ function operators_EL() {
 function addOperators(event) {
   const key = event.target.id.slice(-1) === "" ? event.key : event.target.id.slice(-1);
   if (currentNum || isFinite(equation[equation.length - 1]) || ENDABLES.includes(equation[equation.length - 1])) {
-    if (NON_ENDABLES.includes(equation[equation.length - 1])) {
-      equation.pop();
-      equation.push(key);
-      return;
-    }
     if (currentNum) {
       equation.push(+currentNum);
       currentNum = "";
+    }
+    if (NON_ENDABLES.includes(equation[equation.length - 1])) {
+      equation.pop();
     }
     equation.push(key);
   }
@@ -229,7 +228,7 @@ function addCloseParenthesis() {
   if (equation[equation.length - 1] === "(") {
     equation.pop();
   }
-  if (curentNum || ENDABLES.includes(equation[equation.length - 1])) {
+  if (currentNum || ENDABLES.includes(equation[equation.length - 1])) {
     if (currentNum) {
       equation.push(+currentNum);
       currentNum = "";
@@ -288,6 +287,9 @@ function printResult() {
         closingBrackets++;
       }
 
+      // Converting the "π" symbol to the value of pi upto 6 digits precision WITHOUT ROUNDING 
+      equation = equation.map(element => element === "π" ? Number(Math.trunc(Math.PI * 1000000) / 1000000) : element);
+
       const answer = calculate(equation);
       console.log(answer);
 
@@ -299,7 +301,7 @@ function printResult() {
 }
 
 
-// console.log(calculate("( 4 / 3 ) * π * 2 ^ 3"));
+// console.log(calculate("( 5 + 3 ) * 2 ! - 4 ^ 2"));
 
 
 
