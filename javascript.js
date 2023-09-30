@@ -61,6 +61,9 @@
     -if the equation ends at an operator (NON_ENDABLE) then do nothing
     -if the equation ends at a "(" then just pop it out before running the checks
     -convert the "π" to the value of pi upto 6 digits
+    -if the answer is "Infinity" then allClear everything and DONT store the last answer "Infinity" in currentNum
+    -cut off long decimal answers upto 6 digis precision without rounding
+    -remove trailing zeros after the decimal point and also the decimal point if everything after it has been removed
 */
 
 "use strict";
@@ -137,7 +140,8 @@ function numbers_EL() {
 }
 
 function addToCurrentnum(event) {
-  const key = event.target.id.slice(-1) === "" ? event.key : event.target.id.slice(-1);
+  const key = event.key ? event.key : event.target.id.slice(-1);
+
   if (ENDABLES.includes(equation[equation.length - 1])) {
     equation.push("*");
   }
@@ -187,7 +191,7 @@ function operators_EL() {
 }
 
 function addOperators(event) {
-  const key = event.target.id.slice(-1) === "" ? event.key : event.target.id.slice(-1);
+  const key = event.key ? event.key : event.target.id.slice(-1);
   if (currentNum || isFinite(equation[equation.length - 1]) || ENDABLES.includes(equation[equation.length - 1])) {
     if (currentNum) {
       equation.push(+currentNum);
@@ -292,18 +296,29 @@ function printResult() {
       // Converting the "π" symbol to the value of pi upto 6 digits precision WITHOUT ROUNDING 
       equation = equation.map(element => element === "π" ? Number(Math.trunc(Math.PI * 1000000) / 1000000) : element);
 
-      const answer = calculate(equation);
+      let answer = String(calculate(equation));
 
       console.log(answer);
 
-      if (answer === Infinity) {
+      if (answer === "Infinity") {
         printFullEquation();
         allClear();
         return;
       }
 
       allClear();
-      currentNum = String(answer);
+      // if the decimal part of the answer is longer than 6 digits then truncate it upto 6 digits without rounding it off
+      // and also removing trailing zeros after the decimal point and also the decimal point if everything after it has been removed
+      if (answer.slice(0, answer.indexOf(".") + 7).length > 6) {
+        answer = answer.slice(0, answer.indexOf(".") + 7);
+        while (answer.endsWith("0")) {
+          answer = answer.slice(0, -1);
+        }
+        if (answer[answer.length - 1] === ".") {
+          answer = answer.slice(0, -1);
+        }
+      }
+      currentNum = answer;
     }
   }
   printFullEquation();
