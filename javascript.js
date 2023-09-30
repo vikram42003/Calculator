@@ -42,6 +42,8 @@
     -if "!" is pressed and the element before it is NOT a number OR "π" OR ")" then do nothing
   4)Operators (+, -, *, /, %, ^)
     --- ADD SUPPORT FOR NEGATIVE NUMBERS !!!!
+    -if any number is divided by zero such that the answer is Infinity then display infinity and then reset currentNum to ""
+    instead of "answer" variable in order to start anew
     -if an operator is pressed and the element before it is NOT a number or an ENDABLE then do nothing
     -if an operators is pressed after another operator(NON_ENDABLES) then replace that operator with the new
     operator in the equations array. Eg. in 2+3+ , if * is pressed then it will be 2+3*
@@ -291,9 +293,16 @@ function printResult() {
       equation = equation.map(element => element === "π" ? Number(Math.trunc(Math.PI * 1000000) / 1000000) : element);
 
       const answer = calculate(equation);
+
       console.log(answer);
 
-      equation.length = 0;
+      if (answer === Infinity) {
+        printFullEquation();
+        allClear();
+        return;
+      }
+
+      allClear();
       currentNum = String(answer);
     }
   }
