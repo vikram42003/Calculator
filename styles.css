@@ -55,9 +55,6 @@ body * {
   max-width: 100%;
   font-size: 1.7rem;
   margin: 0;
-  white-space: nowrap;
-  overflow-x: auto;
-  scrollbar-gutter: stable;
 }
 
 .buttons-container {
@@ -89,7 +86,7 @@ body * {
 }
 
 p {
-  font-size: inherit;
+  font-size: 1.3rem;
   background-color: var(--history-box-bg-color);
   border-radius: 5px;
   text-align: end;
@@ -97,9 +94,13 @@ p {
   min-height: 2em;
   line-height: 2em;
   padding: 0 5%;
+  white-space: nowrap;
+  overflow-x: auto;
 }
 
-.history-container > p:first-child {
+.history-container > p {
+  font-size: 1.5rem;
+  font-weight: 900px;
   text-align: center;
   position: sticky;
   padding: 0;

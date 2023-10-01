@@ -46,6 +46,8 @@ let closingBrackets = 0;
 let equation = [];
 let currentNum = "";
 
+let prevEquation = [];
+
 addEventListeners();
 
 
@@ -99,9 +101,45 @@ function keyPress_EL() {
 function printFullEquation() {
   const displayText = document.querySelector(".display-text");
 
-  displayText.textContent = `${equation.join(" ")} ${currentNum}`;
+  const prettyEq = equation.map((element) => {
+    switch (element) {
+      case "+":
+        return "\u002B";
+      case "-":
+        return "\u2122";
+      case "*":
+        return "\u00D7";
+      case "/":
+        return "\u00F7";
+    }
+    return element;
+  }).join(" ");
+
+  displayText.textContent = `${prettyEq} ${currentNum}`;
   // Make the p scroll left incase the equation is long so that the user is looking at the latest input after every input
   displayText.scrollLeft = displayText.scrollWidth;
+}
+
+function logHistory(answer) {
+  const prettyEq = prevEquation.map((element) => {
+    switch (element) {
+      case "+":
+        return "\u002B";
+      case "-":
+        return "\u2122";
+      case "*":
+        return "\u00D7";
+      case "/":
+        return "\u00F7";
+    }
+    return element;
+  }).join(" ");
+
+  const log = document.createElement("p");
+  log.textContent = `${prettyEq} = ${answer}`;
+
+  const history = document.querySelector(".history");
+  history.appendChild(log);
 }
 
 function numbers_EL() {
@@ -264,6 +302,8 @@ function printResult() {
         closingBrackets++;
       }
 
+      prevEquation = [...equation];
+
       // Converting the "π" symbol to the value of pi upto 6 digits precision WITHOUT ROUNDING 
       equation = equation.map(element => element === "π" ? Number(Math.trunc(Math.PI * 1000000) / 1000000) : element);
 
@@ -273,11 +313,11 @@ function printResult() {
 
       if (answer === "Infinity") {
         printFullEquation();
+        logHistory(answer);
         allClear();
         return;
       }
 
-      allClear();
       // if the decimal part of the answer is longer than 6 digits then truncate it upto 6 digits without rounding it off
       // and also removing trailing zeros after the decimal point and also the decimal point if everything after it has been removed
       if (answer.slice(0, answer.indexOf(".") + 7).length > 6) {
@@ -289,6 +329,10 @@ function printResult() {
           answer = answer.slice(0, -1);
         }
       }
+
+      logHistory(answer);
+
+      allClear();
       currentNum = answer;
     }
   }
