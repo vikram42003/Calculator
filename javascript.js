@@ -100,6 +100,8 @@ function printFullEquation() {
   const displayText = document.querySelector(".display-text");
 
   displayText.textContent = `${equation.join(" ")} ${currentNum}`;
+  // Make the p scroll left incase the equation is long so that the user is looking at the latest input after every input
+  displayText.scrollLeft = displayText.scrollWidth;
 }
 
 function numbers_EL() {

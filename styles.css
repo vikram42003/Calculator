@@ -14,14 +14,6 @@
   --history-box-bg-color: #c3ffc1;
 }
 
-/* :root {
-  --body-bg-color: honeydew;
-  --calculator-bg-color: #268057;
-  --buttons-bg-color: #00cc70;
-  --history-bg-color: #268057;
-  --history-box-bg-color: #c3ffc1;
-} */
-
 body {
   height: 100vh;
   width: 100vw;
@@ -53,19 +45,19 @@ body * {
 .display {
   background-color: var(--history-box-bg-color);
   margin: 20px 16px;
-  height: 100px;
+  height: 120px;
   display: flex;
   align-items: center;
+  justify-content: flex-end;
 }
 
 .display-text {
-  width: 100%;
-  margin: 0;
+  max-width: 100%;
   font-size: 1.7rem;
-  text-align: end;
-  line-height: 2;
-  vertical-align: auto;
-  overflow-x: scroll;
+  margin: 0;
+  white-space: nowrap;
+  overflow-x: auto;
+  scrollbar-gutter: stable;
 }
 
 .buttons-container {
@@ -104,7 +96,7 @@ p {
   margin-top: 3%;
   min-height: 2em;
   line-height: 2em;
-  padding-right: 5%;
+  padding: 0 5%;
 }
 
 .history-container > p:first-child {
