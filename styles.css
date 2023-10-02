@@ -14,6 +14,28 @@
   --history-box-bg-color: #c3ffc1;
 }
 
+/* SCROLLBAR */
+/* FOR WEBKIT BASED (CHROME, SAFARI, OPERA GX etc) */
+::-webkit-scrollbar {
+  width: 0.75rem;
+  height: 0.75rem;
+}
+
+::-webkit-scrollbar-track {
+  background: hsl(120 50% 55%);
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(120 50% 35%);
+  border-radius: 100vw;
+}
+/* FOR FIREFOX */
+.history-container, p {
+  scrollbar-width: thin;
+  scrollbar-color: hsl(120 50% 35%) hsl(120 50% 55%);
+}
+
+
 body {
   height: 100vh;
   width: 100vw;
@@ -73,6 +95,31 @@ body * {
 }
 
 /* Buttons */
+
+.buttons:hover {
+  transition: 0.25s;
+  filter: brightness(85%);
+}
+
+.buttons:active {
+  transform: scale(0.925);
+}
+
+.operators_2:hover, #button_fact:hover {
+  background-color: hsl(240 100% 75%);
+}
+
+#button_CE:hover, #button_AC:hover {
+  background-color: hsl(0 100% 75%);
+}
+
+#button_open:hover, #button_close:hover {
+  background-color: hsl(60 100% 75%);
+}
+
+#button_equals:hover {
+  background-color: hsl(120 100% 75%);
+}
 
 /* History Container */
 .history-container {
