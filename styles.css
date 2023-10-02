@@ -105,20 +105,24 @@ body * {
   transform: scale(0.925);
 }
 
+.numbers:hover, #button_pi:hover {
+  background-color: hsl(120 100% 70%);
+}
+
 .operators_2:hover, #button_fact:hover {
-  background-color: hsl(240 100% 75%);
+  background-color: hsl(240 100% 70%);
 }
 
 #button_CE:hover, #button_AC:hover {
-  background-color: hsl(0 100% 75%);
+  background-color: hsl(0 100% 70%);
 }
 
 #button_open:hover, #button_close:hover {
-  background-color: hsl(60 100% 75%);
+  background-color: hsl(60 100% 70%);
 }
 
 #button_equals:hover {
-  background-color: hsl(120 100% 75%);
+  background-color: hsl(120 100% 50%);
 }
 
 /* History Container */
