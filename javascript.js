@@ -4,6 +4,7 @@
     To think about edgecases, only concern yourself with the last pressed key on the calculator for every single key
   1)Numbers
     -no number has been entered but "." is pressed then add a 0 before it. Eg. make it 0.
+    -prevent multiple "." in a single number
     -if a number is pressed after an ENDABLE then add a "*" sign before adding the number. Eg. 2! 2 will become 2! * 2
   2)Pi
     -if pi is pressed after an ENDABLE then add a "*" before it. Eg. ππ will become π * π
@@ -160,6 +161,8 @@ function numbers_EL() {
 
 function addToCurrentnum(event) {
   const key = event.key ? event.key : event.target.id.slice(-1);
+
+  if (key === "." && currentNum.includes(".")) return;
 
   if (ENDABLES.includes(equation[equation.length - 1])) {
     equation.push("*");
