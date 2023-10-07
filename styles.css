@@ -128,7 +128,7 @@ body * {
 /* History Container */
 .history-container {
   background-color: var(--history-bg-color);
-  width: 250px;
+  width: 300px;
   height: 70vh;
   padding: 0.5% 1%;
   font-size: 1.3rem;
@@ -157,4 +157,15 @@ p {
   border: 5px solid darkgreen;
   top: 0;
   padding: 0;
+}
+
+
+/* MEDIA QUERY */
+@media (width <= 1000px) {
+  body {
+    flex-wrap: wrap;
+  }
+  .history-container {
+    width: 500px;
+  }
 }

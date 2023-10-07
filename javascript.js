@@ -35,6 +35,16 @@
     -remove trailing zeros after the decimal point and also the decimal point if everything after it has been removed
 */
 
+/*When you revisit this project
+  -do something about the color scheme cause right now, it does not look like a treat for the eyes
+  -ADD THE MINUS SUPPORT !!!
+  -add a tooltip like thing on hover which displays the shortcut key for that button
+  -see if we can make some improvements on the eventListener functions maybe try using like those polish or
+  reverse polish notations but keep in mind that we gotta follow BODMAS/PEDMAS
+  -try improving the inner working of the calcuator function
+  -and lastly, go all out add sin, cos, tan and all the other mathematical stuff
+*/
+
 "use strict";
 
 const NON_ENDABLES = ["+", "-", "*", "/", "%", "^"];
@@ -104,13 +114,13 @@ function printFullEquation() {
   const prettyEq = equation.map((element) => {
     switch (element) {
       case "+":
-        return "\u002B";
+        return "\u002B";// unicode for plus sign
       case "-":
-        return "\u2122";
+        return "\u2212";// unicode for minus sign
       case "*":
-        return "\u00D7";
+        return "\u00D7";// unicode for multiplication sign
       case "/":
-        return "\u00F7";
+        return "\u00F7";// unicode for division sign
     }
     return element;
   }).join(" ");
@@ -126,7 +136,7 @@ function logHistory(answer) {
       case "+":
         return "\u002B";
       case "-":
-        return "\u2122";
+        return "\u2212";
       case "*":
         return "\u00D7";
       case "/":
@@ -201,7 +211,7 @@ function operators_EL() {
 
 function addOperators(event) {
   const key = event.key ? event.key : event.target.id.slice(-1);
-  if (currentNum || isFinite(equation[equation.length - 1]) || ENDABLES.includes(equation[equation.length - 1])) {
+  if (equation[equation.length - 1] !== "(") {
     if (currentNum) {
       equation.push(+currentNum);
       currentNum = "";
